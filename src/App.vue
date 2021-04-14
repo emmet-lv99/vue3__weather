@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { reactive } from "@vue/composition-api"
+import { reactive, toRef } from "@vue/composition-api"
 
 export default {
   name: "App",
@@ -50,7 +50,7 @@ export default {
     }
 
     const dataBuilder = () => {
-      let d = new Data()
+      let d = new Date()
       let months = [
         "January",
         "February",
