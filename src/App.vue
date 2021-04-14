@@ -2,16 +2,27 @@
   <div id="app">
     <main>
       <div class="search-box">
-        <input type="text" class="search-bar" placeholder="Search..." />
+        <input
+          type="text"
+          class="search-bar"
+          placeholder="Search..."
+          v-model="state.query"
+          @keypress="fetchWeather"
+        />
       </div>
-      <div class="weather-wrap">
+      <div
+        class="weather-wrap"
+        v-if="typeof state.weather.main !== 'undefined'"
+      >
         <div class="location-box">
-          <div class="location">Northampton, UK</div>
-          <div class="date">Monday 20 January 2020</div>
+          <div class="location">
+            {{ state.weather.name }}, {{ state.weather.sys.country }}
+          </div>
+          <div class="date">{{ dateBuilder() }}</div>
         </div>
         <div class="weather-box">
-          <div class="temp">9℃</div>
-          <div class="weather">Rain</div>
+          <div class="temp">{{ state.weather.main.temp }}℃</div>
+          <div class="weather">{{ state.weather.weather[0].main }}</div>
         </div>
       </div>
     </main>
@@ -19,7 +30,7 @@
 </template>
 
 <script>
-import { reactive, toRef } from "@vue/composition-api"
+import { reactive } from "vue"
 
 export default {
   name: "App",
@@ -33,14 +44,14 @@ export default {
 
     const fetchWeather = (e) => {
       if (e.key == "Enter") {
-        let fetchUrl = `${state.url_base}weather?q=${state.query}&units=metric&APPID=${this.api_key}`
+        let fetchUrl = `${state.url_base}weather?q=${state.query}&units=metric&APPID=${state.api_key}`
         fetch(fetchUrl)
           .then((res) => {
             console.log(res)
             return res.json()
           })
           .then((results) => {
-            return this.setResult(results)
+            return setResult(results)
           })
       }
     }
@@ -49,7 +60,7 @@ export default {
       state.weather = results
     }
 
-    const dataBuilder = () => {
+    const dateBuilder = () => {
       let d = new Date()
       let months = [
         "January",
@@ -84,7 +95,7 @@ export default {
       state,
       fetchWeather,
       setResult,
-      dataBuilder,
+      dateBuilder,
     }
   },
 }
