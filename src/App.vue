@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { reactive, toRefs } from "@vue/composition-api"
+import { reactive } from "@vue/composition-api"
 
 export default {
   name: "App",
@@ -29,10 +29,10 @@ export default {
       url_base: "https://api.openweathermap.org/data/2.5/",
       query: "",
       weather: {},
-    }),
+    })
 
     const fetchWeather = (e) => {
-      if(e.key == "Enter") {
+      if (e.key == "Enter") {
         let fetchUrl = `${state.url_base}weather?q=${state.query}&units=metric&APPID=${this.api_key}`
         fetch(fetchUrl)
           .then((res) => {
@@ -40,14 +40,14 @@ export default {
             return res.json()
           })
           .then((results) => {
-            return this.setResult(results);
+            return this.setResult(results)
           })
       }
-    },
+    }
 
     const setResult = (results) => {
-      state.weather = results;
-    },
+      state.weather = results
+    }
 
     const dataBuilder = () => {
       let d = new Data()
@@ -84,7 +84,7 @@ export default {
       state,
       fetchWeather,
       setResult,
-      dataBuilder
+      dataBuilder,
     }
   },
 }
