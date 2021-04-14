@@ -19,8 +19,74 @@
 </template>
 
 <script>
+import { reactive, toRefs } from "@vue/composition-api"
+
 export default {
   name: "App",
+  setup() {
+    const state = reactive({
+      api_key: "8039d224abede960468e5e0c9e9b5477",
+      url_base: "https://api.openweathermap.org/data/2.5/",
+      query: "",
+      weather: {},
+    }),
+
+    const fetchWeather = (e) => {
+      if(e.key == "Enter") {
+        let fetchUrl = `${state.url_base}weather?q=${state.query}&units=metric&APPID=${this.api_key}`
+        fetch(fetchUrl)
+          .then((res) => {
+            console.log(res)
+            return res.json()
+          })
+          .then((results) => {
+            return this.setResult(results);
+          })
+      }
+    },
+
+    const setResult = (results) => {
+      state.weather = results;
+    },
+
+    const dataBuilder = () => {
+      let d = new Data()
+      let months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ]
+      let days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ]
+      let day = days[d.getDay()]
+      let date = d.getDate()
+      let month = months[d.getMonth()]
+      let year = d.getFullYear()
+      return `${day} ${date} ${month} ${year}`
+    }
+    return {
+      state,
+      fetchWeather,
+      setResult,
+      dataBuilder
+    }
+  },
 }
 </script>
 
