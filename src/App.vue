@@ -1,5 +1,13 @@
-<template>
-  <div id="app">
+<template
+  ><div
+    id="app"
+    :class="
+      typeof state.weather.main != 'undefined' &&
+      Math.round(state.weather.main.temp) > 16
+        ? 'warm'
+        : ''
+    "
+  >
     <main>
       <div class="search-box">
         <input
@@ -115,6 +123,9 @@ body {
   background-size: cover;
   background-position: bottom;
   transition: 0.4s;
+}
+#app.warm {
+  background-image: url("./assets/warm-bg.jpg");
 }
 main {
   min-height: 100vh;
